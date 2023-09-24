@@ -113,7 +113,7 @@ let layers_list = [
 ];
 
 const hideLoading = () => {
-  loading_screen.classList.add("hidden");
+  // loading_screen.classList.add("hidden");
 };
 
 layers_list.forEach((layer, index) => {
