@@ -10,55 +10,65 @@ let loading_screen = document.getElementById("loading");
 let loaded = false;
 let load_counter = 0;
 
-const background = new Image();
-const stars_01 = new Image();
-const stars_02 = new Image();
-const stars_03 = new Image();
-const shadows = new Image();
-const mask = new Image();
-const planets = new Image();
-const stars_04 = new Image();
+let background = new Image();
+let stars_01 = new Image();
+let stars_02 = new Image();
+let stars_03 = new Image();
+let shadows = new Image();
+let mask = new Image();
+let planets = new Image();
+let stars_04 = new Image();
+let title = new Image();
 
-const layers_list = [
+let layers_list = [
   {
     image: background,
     src: "/layer_1_1.png",
-    z_index: -2.25,
-    position: { x: 0, y: 0 },
-    blend: null,
-    opacity: 1,
-  },
-  {
-    image: stars_01,
-    src: "/layer_2_1.png",
     z_index: -2,
     position: { x: 0, y: 0 },
     blend: null,
     opacity: 1,
+    maxOffsetX: 100,
+    maxOffsetY: 100,
+    delay: 0,
+  },
+  {
+    image: stars_01,
+    src: "/layer_2_1.png",
+    z_index: -1.8,
+    position: { x: 0, y: 0 },
+    blend: null,
+    opacity: 1,
+    delay: 0,
   },
   {
     image: stars_02,
     src: "/layer_3_1.png",
-    z_index: -1.25,
+    z_index: -1.5,
     position: { x: 0, y: 0 },
     blend: "overlay",
     opacity: 0.7,
+    delay: 0,
   },
   {
     image: stars_03,
     src: "/layer_4_1.png",
-    z_index: -0.5,
+    z_index: -1.25,
     position: { x: 0, y: 0 },
     blend: "overlay",
     opacity: 0.8,
+    delay: 0,
   },
   {
     image: shadows,
     src: "/layer_5_1.png",
-    z_index: -1.25,
+    z_index: -0.75,
     position: { x: 0, y: 0 },
     blend: "multiply",
     opacity: 1,
+    maxOffsetX: 100,
+    maxOffsetY: 100,
+    delay: 0,
   },
   {
     image: mask,
@@ -67,22 +77,38 @@ const layers_list = [
     position: { x: 0, y: 0 },
     blend: null,
     opacity: 1,
+    delay: 0,
   },
   {
     image: planets,
     src: "/layer_7_1.png",
-    z_index: 0.8,
+    z_index: 0.25,
     position: { x: 0, y: 0 },
     blend: null,
     opacity: 1,
+    delay: 0,
   },
   {
     image: stars_04,
     src: "/layer_8_1.png",
-    z_index: 2,
+    z_index: 1.25,
     position: { x: 0, y: 0 },
     blend: null,
-    opacity: 0.9,
+    opacity: 0.8,
+    maxOffsetX: 100,
+    maxOffsetY: 100,
+    delay: 0,
+  },
+  {
+    image: title,
+    src: "/layer_9_1.png",
+    z_index: 1.5,
+    position: { x: canvas.width, y: 0 },
+    blend: null,
+    opacity: 1,
+    maxOffsetX: 120,
+    maxOffsetY: 100,
+    delay: 2000,
   },
 ];
 
@@ -98,6 +124,7 @@ layers_list.forEach((layer, index) => {
       requestAnimationFrame(drawCanvas);
     }
   };
+
   layer.image.src = layer.src;
 });
 
@@ -105,6 +132,20 @@ let getOffset = (layer) => {
   let touch_multip = 0.1;
   let touch_offset_x = pointer.x * layer.z_index * touch_multip;
   let touch_offset_y = pointer.y * layer.z_index * touch_multip;
+
+  // Limit movement based on maxOffsetX and maxOffsetY
+  if (touch_offset_x > layer.maxOffsetX) {
+    touch_offset_x = layer.maxOffsetX;
+  }
+  if (touch_offset_x < -layer.maxOffsetX) {
+    touch_offset_x = -layer.maxOffsetX;
+  }
+  if (touch_offset_y > layer.maxOffsetY) {
+    touch_offset_y = layer.maxOffsetY;
+  }
+  if (touch_offset_y < -layer.maxOffsetY) {
+    touch_offset_y = -layer.maxOffsetY;
+  }
 
   let offset = {
     x: touch_offset_x,
@@ -116,11 +157,11 @@ let getOffset = (layer) => {
 const drawCanvas = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const rotate_x = pointer.y * 0.15 + motion.y * 1.2;
-  const rotate_y = pointer.x * 0.15 + motion.x * 1.2;
-  const transform_string =
-    "rotateX(" + rotate_x + "deg), rotateY(" + rotate_y + "deg)";
-  canvas.style.transform = transform_string;
+  // const rotate_x = pointer.y * 0.15 + motion.y * 1.2;
+  // const rotate_y = pointer.x * 0.15 + motion.x * 1.2;
+  // const transform_string =
+  //   "rotateX(" + rotate_x + "deg), rotateY(" + rotate_y + "deg)";
+  // canvas.style.transform = transform_string;
   layers_list.forEach((layer, index) => {
     layer.position = getOffset(layer);
     // Blend modes
@@ -151,16 +192,17 @@ let pointer = {
 
 const pointerStart = (event) => {
   moving = true;
+
   if (event.type === "touchstart") {
     pointer_init.x = event.touches[0].clientX;
     pointer_init.y = event.touches[0].clientY;
-  } else if (event.type === "mouseover") {
+  } else if (event.type === "mousedown") {
     pointer_init.x = event.clientX;
     pointer_init.y = event.clientY;
   }
 };
 canvas.addEventListener("touchstart", pointerStart);
-canvas.addEventListener("mouseover", pointerStart);
+canvas.addEventListener("mousedown", pointerStart);
 
 const pointerMmove = (event) => {
   event.preventDefault();
@@ -195,7 +237,7 @@ window.addEventListener("mouseup", (event) => {
   endGesture();
 });
 
-let endGesture = () => {
+const endGesture = () => {
   moving = false;
   pointer.x = 0;
   pointer.y = 0;
@@ -205,24 +247,23 @@ let endGesture = () => {
  * Motion ctrl
  */
 
-let motion_init = {
-  x: null,
-  y: null,
-};
-let motion = {
-  x: 0,
-  y: 0,
-};
+// let motion_init = {
+//   x: null,
+//   y: null,
+// };
+// let motion = {
+//   x: 0,
+//   y: 0,
+// };
 
-window.addEventListener("deviceorientation", (event) => {
-  if (!motion_init.x && !motion_init.y) {
-    motion_init.x = beta;
-    motion_init.y = gamma;
-  }
-});
+// window.addEventListener("deviceorientation", (event) => {
+//   if (!motion_init.x && !motion_init.y) {
 
-if (window.scrollX === 0) {
-} else if (window.scrollX === 90) {
-} else if (window.scrollX === -90) {
-} else {
-}
+//   }
+// });
+
+// if (window.scrollX === 0) {
+// } else if (window.scrollX === 90) {
+// } else if (window.scrollX === -90) {
+// } else {
+// }
