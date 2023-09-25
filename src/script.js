@@ -93,15 +93,10 @@ let layers_list = [
   },
 ];
 
-const hideLoading = () => {
-  loading_screen.classList.add("hidden");
-};
-
 layers_list.forEach((layer, index) => {
   layer.image.onload = () => {
     load_counter += 1;
     if (load_counter >= layers_list.length) {
-      hideLoading();
       requestAnimationFrame(drawCanvas);
     }
   };
@@ -136,7 +131,6 @@ const loadTitle = () => {
   }, 2000); // 2-second delay
 };
 
-// Call the function to load "layer_9_1.png" after a delay
 loadTitle();
 
 let getOffset = (layer) => {
