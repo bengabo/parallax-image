@@ -117,15 +117,16 @@ const hideLoading = () => {
 };
 
 layers_list.forEach((layer, index) => {
-  layer.image.onload = () => {
-    load_counter += 1;
-    if (load_counter >= layers_list.length) {
-      hideLoading();
-      requestAnimationFrame(drawCanvas);
-    }
-  };
-
-  layer.image.src = layer.src;
+  setTimeout(() => {
+    layer.image.onload = () => {
+      load_counter += 1;
+      if (load_counter >= layers_list.length) {
+        hideLoading();
+        requestAnimationFrame(drawCanvas);
+      }
+    };
+    layer.image.src = layer.src;
+  }, layer.delay);
 });
 
 let getOffset = (layer) => {
@@ -243,27 +244,3 @@ const endGesture = () => {
   pointer.y = 0;
 };
 
-/**
- * Motion ctrl
- */
-
-// let motion_init = {
-//   x: null,
-//   y: null,
-// };
-// let motion = {
-//   x: 0,
-//   y: 0,
-// };
-
-// window.addEventListener("deviceorientation", (event) => {
-//   if (!motion_init.x && !motion_init.y) {
-
-//   }
-// });
-
-// if (window.scrollX === 0) {
-// } else if (window.scrollX === 90) {
-// } else if (window.scrollX === -90) {
-// } else {
-// }
