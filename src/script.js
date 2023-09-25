@@ -30,7 +30,6 @@ let layers_list = [
     opacity: 1,
     maxOffsetX: 100,
     maxOffsetY: 100,
-    delay: 0,
   },
   {
     image: stars_01,
@@ -39,7 +38,6 @@ let layers_list = [
     position: { x: 0, y: 0 },
     blend: null,
     opacity: 1,
-    delay: 0,
   },
   {
     image: stars_02,
@@ -48,7 +46,6 @@ let layers_list = [
     position: { x: 0, y: 0 },
     blend: "overlay",
     opacity: 0.7,
-    delay: 0,
   },
   {
     image: stars_03,
@@ -57,7 +54,6 @@ let layers_list = [
     position: { x: 0, y: 0 },
     blend: "overlay",
     opacity: 0.8,
-    delay: 0,
   },
   {
     image: shadows,
@@ -68,7 +64,6 @@ let layers_list = [
     opacity: 1,
     maxOffsetX: 100,
     maxOffsetY: 100,
-    delay: 0,
   },
   {
     image: mask,
@@ -77,7 +72,6 @@ let layers_list = [
     position: { x: 0, y: 0 },
     blend: null,
     opacity: 1,
-    delay: 0,
   },
   {
     image: planets,
@@ -86,7 +80,6 @@ let layers_list = [
     position: { x: 0, y: 0 },
     blend: null,
     opacity: 1,
-    delay: 0,
   },
   {
     image: stars_04,
@@ -97,37 +90,54 @@ let layers_list = [
     opacity: 0.8,
     maxOffsetX: 100,
     maxOffsetY: 100,
-    delay: 0,
-  },
-  {
-    image: title,
-    src: "/layer_9_1.png",
-    z_index: 1.5,
-    position: { x: canvas.width, y: 0 },
-    blend: null,
-    opacity: 1,
-    maxOffsetX: 120,
-    maxOffsetY: 100,
-    delay: 2000,
   },
 ];
 
 const hideLoading = () => {
-  // loading_screen.classList.add("hidden");
+  loading_screen.classList.add("hidden");
 };
 
 layers_list.forEach((layer, index) => {
-  setTimeout(() => {
-    layer.image.onload = () => {
-      load_counter += 1;
-      if (load_counter >= layers_list.length) {
-        hideLoading();
-        requestAnimationFrame(drawCanvas);
-      }
-    };
-    layer.image.src = layer.src;
-  }, layer.delay);
+  layer.image.onload = () => {
+    load_counter += 1;
+    if (load_counter >= layers_list.length) {
+      hideLoading();
+      requestAnimationFrame(drawCanvas);
+    }
+  };
+  layer.image.src = layer.src;
 });
+
+// Function to load title after a delay
+const loadTitle = () => {
+  setTimeout(() => {
+    const title = new Image();
+    title.src = "/layer_9_1.png";
+    title.classList.add("title-off-canvas");
+
+    title.onload = () => {
+      layers_list.push({
+        image: title,
+        src: "/layer_9_1.png",
+        z_index: 2,
+        opacity: 1,
+        position: { x: canvas.width, y: 0 },
+        blend: null,
+        maxOffsetX: 120,
+        maxOffsetY: 100,
+      });
+
+      requestAnimationFrame(drawCanvas);
+      setTimeout(() => {
+        title.classList.remove("title-off-canvas");
+        title.classList.add("title-slide-in");
+      }, 2500);
+    };
+  }, 2000); // 2-second delay
+};
+
+// Call the function to load "layer_9_1.png" after a delay
+loadTitle();
 
 let getOffset = (layer) => {
   let touch_multip = 0.1;
@@ -157,12 +167,6 @@ let getOffset = (layer) => {
 };
 const drawCanvas = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // const rotate_x = pointer.y * 0.15 + motion.y * 1.2;
-  // const rotate_y = pointer.x * 0.15 + motion.x * 1.2;
-  // const transform_string =
-  //   "rotateX(" + rotate_x + "deg), rotateY(" + rotate_y + "deg)";
-  // canvas.style.transform = transform_string;
   layers_list.forEach((layer, index) => {
     layer.position = getOffset(layer);
     // Blend modes
@@ -243,4 +247,3 @@ const endGesture = () => {
   pointer.x = 0;
   pointer.y = 0;
 };
-
