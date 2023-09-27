@@ -23,7 +23,7 @@ let title = new Image();
 let layers_list = [
   {
     image: background,
-    src: "/layer_1_1.png",
+    src: "./img/layer_1_1.png",
     z_index: -2,
     position: { x: 0, y: 0 },
     blend: null,
@@ -33,7 +33,7 @@ let layers_list = [
   },
   {
     image: stars_01,
-    src: "/layer_2_1.png",
+    src: "./img/layer_2_1.png",
     z_index: -1.8,
     position: { x: 0, y: 0 },
     blend: null,
@@ -41,7 +41,7 @@ let layers_list = [
   },
   {
     image: stars_02,
-    src: "/layer_3_1.png",
+    src: "./img/layer_3_1.png",
     z_index: -1.5,
     position: { x: 0, y: 0 },
     blend: "overlay",
@@ -49,7 +49,7 @@ let layers_list = [
   },
   {
     image: stars_03,
-    src: "/layer_4_1.png",
+    src: "./img/layer_4_1.png",
     z_index: -1.25,
     position: { x: 0, y: 0 },
     blend: "overlay",
@@ -57,7 +57,7 @@ let layers_list = [
   },
   {
     image: shadows,
-    src: "/layer_5_1.png",
+    src: "./img/layer_5_1.png",
     z_index: -0.75,
     position: { x: 0, y: 0 },
     blend: "multiply",
@@ -67,7 +67,7 @@ let layers_list = [
   },
   {
     image: mask,
-    src: "/layer_6_1.png",
+    src: "./img/layer_6_1.png",
     z_index: 0,
     position: { x: 0, y: 0 },
     blend: null,
@@ -75,7 +75,7 @@ let layers_list = [
   },
   {
     image: planets,
-    src: "/layer_7_1.png",
+    src: "./img/layer_7_1.png",
     z_index: 0.25,
     position: { x: 0, y: 0 },
     blend: null,
@@ -83,7 +83,7 @@ let layers_list = [
   },
   {
     image: stars_04,
-    src: "/layer_8_1.png",
+    src: "./img/layer_8_1.png",
     z_index: 1.25,
     position: { x: 0, y: 0 },
     blend: null,
@@ -107,13 +107,13 @@ layers_list.forEach((layer, index) => {
 const loadTitle = () => {
   setTimeout(() => {
     const title = new Image();
-    title.src = "/layer_9_1.png";
+    title.src = "./img/layer_9_1.png";
     title.classList.add("title-off-canvas");
 
     title.onload = () => {
       layers_list.push({
         image: title,
-        src: "/layer_9_1.png",
+        src: "./img/layer_9_1.png",
         z_index: 2,
         opacity: 1,
         position: { x: canvas.width, y: 0 },
