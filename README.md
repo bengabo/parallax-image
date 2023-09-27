@@ -1,3 +1,3 @@
 # interactive parallax illustration
 
-https://bengabo.github.io/parallax-image/
+<https://bengabo.github.io/parallax-image/>
