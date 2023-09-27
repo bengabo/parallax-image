@@ -1,3 +1,3 @@
 # interactive parallax illustration
 
-https://vocal-haupia-fea1db.netlify.app/
+https://bengabo.github.io/parallax-image/
